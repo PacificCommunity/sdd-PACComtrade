@@ -983,12 +983,18 @@ def process(data) :
     log("INFO", f"Set observation status")
 
     d=date.today().replace(day=1)
-    M0=date.strftime(d, "%Y-%m")
-    M1=date.strftime(d-relativedelta(months=1), "%Y-%m")
-    M2=date.strftime(d-relativedelta(months=2), "%Y-%m")
-    M3=date.strftime(d-relativedelta(months=3), "%Y-%m")
+    #M0=date.strftime(d, "%Y-%m")
+    #M1=date.strftime(d-relativedelta(months=1), "%Y-%m")
+    #M2=date.strftime(d-relativedelta(months=2), "%Y-%m")
+    #M3=date.strftime(d-relativedelta(months=3), "%Y-%m")
 
-    cube["OBS_STATUS"]=np.where(cube["TIME_PERIOD"].isin([M0, M1, M2, M3]), "P", cube["OBS_STATUS"])
+
+    provisionalMonths = [
+     (d - relativedelta(months=i)).strftime("%Y-%m")
+     for i in range(0, 12)
+    ]
+
+    cube["OBS_STATUS"]=np.where(cube["TIME_PERIOD"].isin([provisioalMonths), "P", cube["OBS_STATUS"])
 
 # ------------------------------------------------------------------------------------------------------------------------
 # ADD SDMX HEADER COLULN
@@ -1263,13 +1269,20 @@ PICTs=["KI", "TO", "TV"]
 # Months for which the process should be executed, the past 4 months
 # Instead of execution time one could also query .STAT about last recorded month
 d=date.today().replace(day=1)
-M0=date.strftime(d, "%Y-%m")
-M1=date.strftime(d-relativedelta(months=1), "%Y-%m")
-M2=date.strftime(d-relativedelta(months=2), "%Y-%m")
-M3=date.strftime(d-relativedelta(months=3), "%Y-%m")
-M4=date.strftime(d-relativedelta(months=4), "%Y-%m")
+#M0=date.strftime(d, "%Y-%m")
+#M1=date.strftime(d-relativedelta(months=1), "%Y-%m")
+#M2=date.strftime(d-relativedelta(months=2), "%Y-%m")
+#M3=date.strftime(d-relativedelta(months=3), "%Y-%m")
+#M4=date.strftime(d-relativedelta(months=4), "%Y-%m")
 
-reportMonths=[M1, M2, M3, M4]
+#reportMonths=[M1, M2, M3, M4]
+
+
+reportMonths = [
+    (d - relativedelta(months=i)).strftime("%Y-%m")
+    for i in range(1, 13)
+]
+
 
 # Loop over countries and months and run the collect/validate/aggregate/publish process
 
